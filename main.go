@@ -10,6 +10,10 @@ import (
 	svg "github.com/ajstarks/svgo"
 )
 
+var (
+	paramNames = []string{"MHP", "MMP", "ATK", "DEF", "MAT", "MDF", "AGI", "LUK"}
+)
+
 type Position struct {
 	X []int
 	Y []int
@@ -32,7 +36,7 @@ func main() {
 		r := 250
 		w, h := r*2, r*2
 		paramPos, titlePos := PolygonXYs(c, r, w, h)
-		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos)
+		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames)
 		break
 	}
 }
@@ -72,7 +76,7 @@ func PolygonXYs(c Class, r, w, h int) (paramPos Position, titlePos Position) {
 	return
 }
 
-func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position) {
+func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position, paramNames []string) {
 	canvas := svg.New(wr)
 	canvas.Start(w, h)
 	canvas.Circle(w/2, h/2, 100)
@@ -81,7 +85,8 @@ func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position)
 	for i := 0; i < len(titlePos.X); i++ {
 		x := titlePos.X[i]
 		y := titlePos.Y[i]
-		canvas.Text(x, y, "test", "text-anchor:middle;font-size:30px;fill:white")
+		t := paramNames[i]
+		canvas.Text(x, y, t, "text-anchor:middle;font-size:30px;fill:black")
 	}
 	canvas.End()
 }
