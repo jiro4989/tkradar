@@ -10,6 +10,11 @@ import (
 	svg "github.com/ajstarks/svgo"
 )
 
+type Position struct {
+	X []int
+	Y []int
+}
+
 func main() {
 	b, err := ioutil.ReadFile("testdata/Classes.json")
 	if err != nil {
@@ -24,23 +29,28 @@ func main() {
 			// Classes.jsonの最初のデータは絶対にnullのためスキップ
 			continue
 		}
-		r, w, h := 50, 100, 100
-		xs, ys := PolygonXYs(c, r, w, h)
-		WriteSVG(os.Stdout, c, xs, ys)
+		r := 250
+		w, h := r*2, r*2
+		paramPos, titlePos := PolygonXYs(c, r, w, h)
+		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos)
+		break
 	}
 }
 
 // PolygonXYs はClassのパラメータからX,Y座標のスライスを返す
-func PolygonXYs(c Class, r, w, h int) (xs []int, ys []int) {
+func PolygonXYs(c Class, r, w, h int) (paramPos Position, titlePos Position) {
 	var (
 		cx = float64(w / 2) // 中心x座標
 		cy = float64(h / 2) // 中心y座標
-		fr = float64(r)     // sin/cos計算のためにfloatに型を合わせるため
 	)
 	for i := 0; i < len(c.Params); i++ {
 		n := float64(360 / len(c.Params) * i)
-		x := fr*math.Cos(n*math.Pi/180) + cx
-		y := fr*math.Sin(n*math.Pi/180) + cy
+		x := float64(r-25)*math.Cos(n*math.Pi/180) + cx
+		y := float64(r-25)*math.Sin(n*math.Pi/180) + cy
+		titleX := float64(r)*math.Cos(n*math.Pi/180) + cx
+		titleY := float64(r)*math.Sin(n*math.Pi/180) + cy
+		titlePos.X = append(titlePos.X, int(titleX))
+		titlePos.Y = append(titlePos.Y, int(titleY))
 
 		max := 255
 		switch i {
@@ -56,22 +66,22 @@ func PolygonXYs(c Class, r, w, h int) (xs []int, ys []int) {
 		x = x * float64(last) / float64(max)
 		y = y * float64(last) / float64(max)
 
-		xs = append(xs, int(x))
-		ys = append(ys, int(y))
+		paramPos.X = append(paramPos.X, int(x))
+		paramPos.Y = append(paramPos.Y, int(y))
 	}
 	return
 }
 
-func WriteSVG(w io.Writer, c Class, xs, ys []int) {
-	var (
-		width  = 100
-		height = 100
-		title  = "test"
-	)
-	canvas := svg.New(w)
-	canvas.Start(width, height)
-	canvas.Circle(width/2, height/2, 100)
-	canvas.Polygon(xs, ys)
-	canvas.Text(width/2, height/2, title, "text-anchor:middle;font-size:30px;fill:white")
+func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position) {
+	canvas := svg.New(wr)
+	canvas.Start(w, h)
+	canvas.Circle(w/2, h/2, 100)
+	canvas.Polygon(titlePos.X, titlePos.Y, "fill:white;")
+	canvas.Text(w/2, h/2, title, "text-anchor:middle;font-size:30px;fill:white")
+	for i := 0; i < len(titlePos.X); i++ {
+		x := titlePos.X[i]
+		y := titlePos.Y[i]
+		canvas.Text(x, y, "test", "text-anchor:middle;font-size:30px;fill:white")
+	}
 	canvas.End()
 }
