@@ -19,7 +19,6 @@
 <polygon points="350,250 320,320 250,350 179,320 150,250 179,179 249,150 320,179" style="fill:none; stroke:black;" />
 <polygon points="400,250 356,356 250,400 143,356 100,250 143,143 249,100 356,143" style="fill:none; stroke:black;" />
 <polygon points="450,250 391,391 250,450 108,391 50,250 108,108 249,50 391,108" style="fill:none; stroke:black;" />
-<text x="250" y="250" style="text-anchor:middle; font-size:30px; fill:white;" >test</text>
 <text x="249" y="0" style="text-anchor:middle; font-size:30px; fill:black;" >MHP</text>
 <text x="426" y="73" style="text-anchor:middle; font-size:30px; fill:black;" >MMP</text>
 <text x="500" y="249" style="text-anchor:middle; font-size:30px; fill:black;" >ATK</text>

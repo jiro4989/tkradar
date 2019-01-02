@@ -22,23 +22,6 @@ type PolygonPosition struct {
 	X, Y []int
 }
 
-// Rotate はN度半時計回りに回転させる
-func (p *PolygonPosition) Rotate(n int) {
-	var (
-		rad  = math.Pi / 180
-		nrad = float64(n) * rad
-		cos  = math.Cos(nrad)
-		sin  = math.Sin(nrad)
-	)
-	for i := 0; i < len(p.X); i++ {
-		x, y := float64(p.X[i]), float64(p.Y[i])
-		x = cos*x - sin*y
-		y = sin*x + cos*y
-		p.X[i] = int(x)
-		p.Y[i] = int(y)
-	}
-}
-
 func main() {
 	b, err := ioutil.ReadFile("testdata/Classes2.json")
 	if err != nil {
@@ -192,7 +175,7 @@ func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPo
 		p := PolygonXYs2(float64(r), float64(w), float64(h), len(paramNames))
 		canvas.Polygon(p.X, p.Y, "fill:none; stroke:black;")
 	}
-	canvas.Text(w/2, h/2, title, "text-anchor:middle; font-size:30px; fill:white;")
+	// canvas.Text(w/2, h/2, title, "text-anchor:middle; font-size:30px; fill:white;")
 	for i := 0; i < len(titlePos.X); i++ {
 		x := titlePos.X[i]
 		y := titlePos.Y[i]
