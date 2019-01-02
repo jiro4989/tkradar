@@ -14,13 +14,13 @@ var (
 	paramNames = []string{"MHP", "MMP", "ATK", "DEF", "MAT", "MDF", "AGI", "LUK"}
 )
 
-type Position struct {
+type PolygonPosition struct {
 	X []int
 	Y []int
 }
 
 // Rotate はN度半時計回りに回転させる
-func (p *Position) Rotate(n int) {
+func (p *PolygonPosition) Rotate(n int) {
 	var (
 		rad  = math.Pi / 180
 		nrad = float64(n) * rad
@@ -62,7 +62,7 @@ func main() {
 }
 
 // PolygonXYs はClassのパラメータからX,Y座標のスライスを返す
-func PolygonXYs(c Class, r, w, h int) (paramPos Position, titlePos Position) {
+func PolygonXYs(c Class, r, w, h int) (paramPos PolygonPosition, titlePos PolygonPosition) {
 	var (
 		cx      = float64(w / 2) // 中心x座標
 		cy      = float64(h / 2) // 中心y座標
@@ -104,7 +104,7 @@ func PolygonXYs(c Class, r, w, h int) (paramPos Position, titlePos Position) {
 }
 
 // PolygonXYs2 はClassのパラメータからX,Y座標のスライスを返す
-func PolygonXYs2(r, w, h float64, polygonCount int) (paramPos Position) {
+func PolygonXYs2(r, w, h float64, polygonCount int) (paramPos PolygonPosition) {
 	var (
 		cx     = w / 2
 		cy     = h / 2
@@ -124,7 +124,7 @@ func PolygonXYs2(r, w, h float64, polygonCount int) (paramPos Position) {
 }
 
 // PolygonXYs3 はClassのパラメータからX,Y座標のスライスを返す
-func PolygonXYs3(c Class, r, w, h float64) (paramPos Position) {
+func PolygonXYs3(c Class, r, w, h float64) (paramPos PolygonPosition) {
 	var (
 		cx           = w / 2
 		cy           = h / 2
@@ -158,7 +158,7 @@ func PolygonXYs3(c Class, r, w, h float64) (paramPos Position) {
 	return
 }
 
-func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position, paramNames []string) {
+func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPosition, paramNames []string) {
 	canvas := svg.New(wr)
 	canvas.Start(w, h)
 	canvas.Circle(w/2, h/2, 100)
