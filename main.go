@@ -160,20 +160,20 @@ func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPo
 	canvas.Start(w, h)
 	canvas.Circle(w/2, h/2, 100)
 	// 外枠の描画
-	canvas.Polygon(titlePos.X, titlePos.Y, "fill:white; stroke:black; ")
+	canvas.Polygon(titlePos.X, titlePos.Y, "fill:#FAFAFA; stroke:#BDBDBD; ")
+	// パラメータ線の描画
+	canvas.Polygon(paramPos.X, paramPos.Y, "fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;")
 	// 中央線の描画
 	for i, x := range titlePos.X {
 		cx, cy := w/2, h/2
 		y := titlePos.Y[i]
-		canvas.Line(cx, cy, x, y, "stroke:black;")
+		canvas.Line(cx, cy, x, y, "fill:#FAFAFA; stroke:#BDBDBD; ")
 	}
-	// パラメータ線の描画
-	canvas.Polygon(paramPos.X, paramPos.Y, "fill:none; stroke:red; ")
 	// 等間隔基準線の描画
 	for i := 0; i < 5; i++ {
 		r := w / 2 * i / 5
 		p := PolygonXYs2(float64(r), float64(w), float64(h), len(paramNames))
-		canvas.Polygon(p.X, p.Y, "fill:none; stroke:black;")
+		canvas.Polygon(p.X, p.Y, "fill:none; stroke:#BDBDBD;")
 	}
 	// canvas.Text(w/2, h/2, title, "text-anchor:middle; font-size:30px; fill:white;")
 	for i := 0; i < len(titlePos.X); i++ {
