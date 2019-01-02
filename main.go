@@ -102,11 +102,36 @@ func PolygonXYs(c Class, r, w, h int) (paramPos Position, titlePos Position) {
 	return
 }
 
+// PolygonXYs2 はClassのパラメータからX,Y座標のスライスを返す
+func PolygonXYs2(r, w, h float64, polygonCount int) (paramPos Position) {
+	var (
+		cx     = w / 2
+		cy     = h / 2
+		radian = math.Pi / 180
+	)
+	for i := 0; i < polygonCount; i++ {
+		var (
+			n     = float64(360 / polygonCount * i)
+			theta = n * radian
+			x     = r*math.Cos(theta) + cx
+			y     = r*math.Sin(theta) + cy
+		)
+		paramPos.X = append(paramPos.X, int(x))
+		paramPos.Y = append(paramPos.Y, int(y))
+	}
+	return
+}
+
 func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position, paramNames []string) {
 	canvas := svg.New(wr)
 	canvas.Start(w, h)
 	canvas.Circle(w/2, h/2, 100)
 	canvas.Polygon(titlePos.X, titlePos.Y, "fill:white; stroke:black; ")
+	for i := 0; i < 5; i++ {
+		r := w / 2 * i / 5
+		p := PolygonXYs2(float64(r), float64(w), float64(h), len(paramNames))
+		canvas.Polygon(p.X, p.Y, "fill:none; stroke:black;")
+	}
 	canvas.Text(w/2, h/2, title, "text-anchor:middle; font-size:30px; fill:white;")
 	for i := 0; i < len(titlePos.X); i++ {
 		x := titlePos.X[i]
