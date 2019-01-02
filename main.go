@@ -17,6 +17,7 @@ var (
 type Point struct {
 	X, Y float64
 }
+type Points []Point
 
 // Rotate は任意の角度回転した座標を返す。
 // cpは原点座標
@@ -39,6 +40,40 @@ func (p Point) Rotate(angle float64, cp Point) Point {
 	p.X = nx + cp.X
 	p.Y = ny + cp.Y
 	return p
+}
+
+type PolygonPoint struct {
+	Points
+}
+
+func (p *PolygonPoint) Xs() (x []float64) {
+	l := len(p.Points)
+	x = make([]float64, l)
+
+	for i := 0; i < l; i++ {
+		x[i] = p.Points[i].X
+	}
+	return
+}
+
+func (p *PolygonPoint) Ys() (y []float64) {
+	l := len(p.Points)
+	y = make([]float64, l)
+
+	for i := 0; i < l; i++ {
+		y[i] = p.Points[i].Y
+	}
+	return
+}
+
+type float64slice []float64
+
+func (f *float64slice) Int() (i []int) {
+	i = make([]int, len(*f))
+	for n, v := range *f {
+		i[n] = int(v)
+	}
+	return
 }
 
 type PolygonPosition struct {
