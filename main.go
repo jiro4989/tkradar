@@ -8,73 +8,12 @@ import (
 	"os"
 
 	svg "github.com/ajstarks/svgo"
+	"github.com/jiro4989/tkradar/point"
 )
 
 var (
 	paramNames = []string{"MHP", "MMP", "ATK", "DEF", "MAT", "MDF", "AGI", "LUK"}
 )
-
-type Point struct {
-	X, Y float64
-}
-type Points []Point
-
-// Rotate は任意の角度回転した座標を返す。
-// cpは原点座標
-// angle は以下の式で求める
-// 90度回転の例:
-//
-//   n := 90
-//   n * math.Pi / 180
-func (p Point) Rotate(angle float64, cp Point) Point {
-	p.X -= cp.X
-	p.Y -= cp.Y
-
-	var (
-		sin = math.Sin(angle)
-		cos = math.Cos(angle)
-		nx  = cos*p.X - sin*p.Y
-		ny  = sin*p.X + cos*p.Y
-	)
-
-	p.X = nx + cp.X
-	p.Y = ny + cp.Y
-	return p
-}
-
-type PolygonPoint struct {
-	Points
-}
-
-func (p *PolygonPoint) Xs() (x []float64) {
-	l := len(p.Points)
-	x = make([]float64, l)
-
-	for i := 0; i < l; i++ {
-		x[i] = p.Points[i].X
-	}
-	return
-}
-
-func (p *PolygonPoint) Ys() (y []float64) {
-	l := len(p.Points)
-	y = make([]float64, l)
-
-	for i := 0; i < l; i++ {
-		y[i] = p.Points[i].Y
-	}
-	return
-}
-
-type float64slice []float64
-
-func (f *float64slice) Int() (i []int) {
-	i = make([]int, len(*f))
-	for n, v := range *f {
-		i[n] = int(v)
-	}
-	return
-}
 
 type PolygonPosition struct {
 	X, Y []int
@@ -96,9 +35,10 @@ func main() {
 		}
 		r := 250
 		w, h := r*2, r*2
+		titlePP := point.RegularPolygonPoint(float64(r), float64(w), float64(h), 8)
 		paramPos, titlePos := PolygonXYs(c, r, w, h)
 		paramPos = PolygonXYs3(c, float64(r), float64(w), float64(h))
-		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames)
+		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames, titlePP)
 		break
 	}
 }
@@ -211,12 +151,13 @@ func PolygonXYs3(c Class, r, w, h float64) (paramPos PolygonPosition) {
 	return
 }
 
-func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPosition, paramNames []string) {
+func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPosition, paramNames []string, titlePP point.PolygonPoint) {
 	canvas := svg.New(wr)
 	canvas.Start(w, h)
 	canvas.Circle(w/2, h/2, 100)
 	// 外枠の描画
-	canvas.Polygon(titlePos.X, titlePos.Y, "fill:#FAFAFA; stroke:#BDBDBD; ")
+	canvas.Polygon(titlePP.Xs().Int(), titlePP.Ys().Int(), "fill:#FAFAFA; stroke:#BDBDBD; ")
+	// canvas.Polygon(titlePos.X, titlePos.Y, "fill:#FAFAFA; stroke:#BDBDBD; ")
 	// パラメータ線の描画
 	canvas.Polygon(paramPos.X, paramPos.Y, "fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;")
 	// 中央線の描画
