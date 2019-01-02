@@ -110,6 +110,14 @@ func WriteSVG2(wr io.Writer, w, h float64, paramPP, titlePP point.PolygonPoint) 
 	canvas.Polygon(titlePP.Xs().Int(), titlePP.Ys().Int(), "fill:#FAFAFA; stroke:#BDBDBD; ")
 	// パラメータ線の描画
 	canvas.Polygon(paramPP.Xs().Int(), paramPP.Ys().Int(), "fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;")
+	// 中央線の描画
+	for _, p := range titlePP.Points {
+		var (
+			x, y   = int(p.X), int(p.Y)
+			cx, cy = wi / 2, hi / 2
+		)
+		canvas.Line(cx, cy, x, y, "fill:#FAFAFA; stroke:#BDBDBD; ")
+	}
 	canvas.End()
 }
 func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPosition, paramNames []string, titlePP point.PolygonPoint) {
