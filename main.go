@@ -79,12 +79,17 @@ func PolygonXYs(c Class, r, w, h int) (paramPos PolygonPosition, titlePos Polygo
 			theta  = n * radian
 			x      = fr*math.Cos(theta) + cx
 			y      = fr*math.Sin(theta) + cy
-			titleX = titleFr*math.Cos(theta) + cx
-			titleY = titleFr*math.Sin(theta) + cy
+			titleX = math.Cos(theta)
+			titleY = math.Sin(theta)
 		)
+		// 90度半時計回りに回転させる
+		// See. https://mathwords.net/heimenkaiten
+		rad := 270 * radian
+		ntx := titleFr*(titleX*math.Cos(rad)-titleY*math.Sin(rad)) + cx
+		nty := titleFr*(titleX*math.Sin(rad)+titleY*math.Cos(rad)) + cy
 
-		titlePos.X = append(titlePos.X, int(titleX))
-		titlePos.Y = append(titlePos.Y, int(titleY))
+		titlePos.X = append(titlePos.X, int(ntx))
+		titlePos.Y = append(titlePos.Y, int(nty))
 
 		max := 255
 		switch i {
