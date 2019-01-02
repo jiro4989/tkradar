@@ -37,7 +37,7 @@ func (p *Position) Rotate(n int) {
 }
 
 func main() {
-	b, err := ioutil.ReadFile("testdata/Classes.json")
+	b, err := ioutil.ReadFile("testdata/Classes2.json")
 	if err != nil {
 		panic(err)
 	}
@@ -53,6 +53,7 @@ func main() {
 		r := 250
 		w, h := r*2, r*2
 		paramPos, titlePos := PolygonXYs(c, r, w, h)
+		paramPos = PolygonXYs3(c, float64(r), float64(w), float64(h))
 		//paramPos.Rotate(90)
 		//titlePos.Rotate(90)
 		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames)
@@ -122,11 +123,47 @@ func PolygonXYs2(r, w, h float64, polygonCount int) (paramPos Position) {
 	return
 }
 
+// PolygonXYs3 はClassのパラメータからX,Y座標のスライスを返す
+func PolygonXYs3(c Class, r, w, h float64) (paramPos Position) {
+	var (
+		cx           = w / 2
+		cy           = h / 2
+		radian       = math.Pi / 180
+		polygonCount = len(c.Params)
+	)
+	for i := 0; i < polygonCount; i++ {
+		// 座標計算に必要な半径はパラメータの値で都度異なるため、rを都度更新
+		max := 255
+		switch i {
+		case 0: // MHP
+			max = 9999
+		case 1: // MMP
+			max = 2000
+		case 6, 7: // AGI, LUK
+			max = 500
+		}
+		p := c.Params[i]
+		last := p[len(p)-1]
+		nr := r * float64(last) / float64(max)
+
+		var (
+			n     = float64(360 / polygonCount * i)
+			theta = n * radian
+			x     = nr*math.Cos(theta) + cx
+			y     = nr*math.Sin(theta) + cy
+		)
+		paramPos.X = append(paramPos.X, int(x))
+		paramPos.Y = append(paramPos.Y, int(y))
+	}
+	return
+}
+
 func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position, paramNames []string) {
 	canvas := svg.New(wr)
 	canvas.Start(w, h)
 	canvas.Circle(w/2, h/2, 100)
 	canvas.Polygon(titlePos.X, titlePos.Y, "fill:white; stroke:black; ")
+	canvas.Polygon(paramPos.X, paramPos.Y, "fill:none; stroke:red; ")
 	for i := 0; i < 5; i++ {
 		r := w / 2 * i / 5
 		p := PolygonXYs2(float64(r), float64(w), float64(h), len(paramNames))
