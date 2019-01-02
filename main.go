@@ -19,6 +19,23 @@ type Position struct {
 	Y []int
 }
 
+// Rotate はN度半時計回りに回転させる
+func (p *Position) Rotate(n int) {
+	var (
+		rad  = math.Pi / 180
+		nrad = float64(n) * rad
+		cos  = math.Cos(nrad)
+		sin  = math.Sin(nrad)
+	)
+	for i := 0; i < len(p.X); i++ {
+		x, y := float64(p.X[i]), float64(p.Y[i])
+		x = cos*x - sin*y
+		y = sin*x + cos*y
+		p.X[i] = int(x)
+		p.Y[i] = int(y)
+	}
+}
+
 func main() {
 	b, err := ioutil.ReadFile("testdata/Classes.json")
 	if err != nil {
@@ -36,6 +53,8 @@ func main() {
 		r := 250
 		w, h := r*2, r*2
 		paramPos, titlePos := PolygonXYs(c, r, w, h)
+		paramPos.Rotate(90)
+		titlePos.Rotate(90)
 		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames)
 		break
 	}
@@ -44,15 +63,22 @@ func main() {
 // PolygonXYs はClassのパラメータからX,Y座標のスライスを返す
 func PolygonXYs(c Class, r, w, h int) (paramPos Position, titlePos Position) {
 	var (
-		cx = float64(w / 2) // 中心x座標
-		cy = float64(h / 2) // 中心y座標
+		cx      = float64(w / 2) // 中心x座標
+		cy      = float64(h / 2) // 中心y座標
+		fr      = float64(r - 25)
+		titleFr = float64(r)
+		radian  = math.Pi / 180
 	)
 	for i := 0; i < len(c.Params); i++ {
-		n := float64(360 / len(c.Params) * i)
-		x := float64(r-25)*math.Cos(n*math.Pi/180) + cx
-		y := float64(r-25)*math.Sin(n*math.Pi/180) + cy
-		titleX := float64(r)*math.Cos(n*math.Pi/180) + cx
-		titleY := float64(r)*math.Sin(n*math.Pi/180) + cy
+		var (
+			n      = float64(360 / len(c.Params) * i)
+			theta  = n * radian
+			x      = fr*math.Cos(theta) + cx
+			y      = fr*math.Sin(theta) + cy
+			titleX = titleFr*math.Cos(theta) + cx
+			titleY = titleFr*math.Sin(theta) + cy
+		)
+
 		titlePos.X = append(titlePos.X, int(titleX))
 		titlePos.Y = append(titlePos.Y, int(titleY))
 
