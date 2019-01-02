@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
-	"os"
 
 	svg "github.com/ajstarks/svgo"
 	"github.com/jiro4989/tkradar/point"
@@ -33,12 +33,17 @@ func main() {
 			// Classes.jsonの最初のデータは絶対にnullのためスキップ
 			continue
 		}
-		r := 250
-		w, h := r*2, r*2
-		titlePP := point.RegularPolygonPoint(float64(r), float64(w), float64(h), 8)
-		paramPos, titlePos := PolygonXYs(c, r, w, h)
-		paramPos = PolygonXYs3(c, float64(r), float64(w), float64(h))
-		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames, titlePP)
+		var (
+			r    = 250.0
+			w, h = r * 2, r * 2
+			cp   = point.Point{X: w / 2, Y: h / 2}
+		)
+		titlePP := point.RegularPolygonPoint(r, w, h, 8)
+		paramPos := PolygonPoint(c.Params, r, cp)
+		fmt.Println(titlePP)
+		fmt.Println(paramPos)
+		//paramPos, titlePos := PolygonXYs(c, r, w, h)
+		//WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames, titlePP)
 		break
 	}
 }
@@ -110,43 +115,34 @@ func RegularPolygon(r, w, h float64, polygonCount int) (paramPos PolygonPosition
 	return
 }
 
-// PolygonXYs3 はClassのパラメータからX,Y座標のスライスを返す
-func PolygonXYs3(c Class, r, w, h float64) (paramPos PolygonPosition) {
+// PolygonPoint はdataから座標を返す
+func PolygonPoint(data [][]float64, r float64, cp point.Point) (pp point.PolygonPoint) {
 	var (
-		cx           = w / 2
-		cy           = h / 2
 		radian       = math.Pi / 180
-		polygonCount = len(c.Params)
+		polygonCount = len(data)
 	)
 	for i := 0; i < polygonCount; i++ {
 		// 座標計算に必要な半径はパラメータの値で都度異なるため、rを都度更新
-		max := 255
+		max := 255.0
 		switch i {
 		case 0: // MHP
-			max = 9999
+			max = 9999.0
 		case 1: // MMP
-			max = 2000
+			max = 2000.0
 		case 6, 7: // AGI, LUK
-			max = 500
+			max = 500.0
 		}
-		p := c.Params[i]
+		p := data[i]
 		last := p[len(p)-1]
-		nr := r * float64(last) / float64(max)
+		nr := r * last / max
 
 		var (
 			n     = float64(360 / polygonCount * i)
 			theta = n * radian
-			x     = math.Cos(theta)
-			y     = math.Sin(theta)
+			x     = nr*math.Cos(theta) + cp.X
+			y     = nr*math.Sin(theta) + cp.Y
 		)
-		// 90度半時計回りに回転させる
-		// See. https://mathwords.net/heimenkaiten
-		rad := 270 * radian
-		nx := nr*(x*math.Cos(rad)-y*math.Sin(rad)) + cx
-		ny := nr*(x*math.Sin(rad)+y*math.Cos(rad)) + cy
-
-		paramPos.X = append(paramPos.X, int(nx))
-		paramPos.Y = append(paramPos.Y, int(ny))
+		pp.Points = append(pp.Points, point.Point{X: x, Y: y})
 	}
 	return
 }
