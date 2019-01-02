@@ -42,77 +42,9 @@ func main() {
 		paramPos := PolygonPoint(c.Params, r, cp)
 		fmt.Println(titlePP)
 		fmt.Println(paramPos)
-		//paramPos, titlePos := PolygonXYs(c, r, w, h)
 		//WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames, titlePP)
 		break
 	}
-}
-
-// PolygonXYs はClassのパラメータからX,Y座標のスライスを返す
-func PolygonXYs(c Class, r, w, h int) (paramPos PolygonPosition, titlePos PolygonPosition) {
-	var (
-		cx      = float64(w / 2) // 中心x座標
-		cy      = float64(h / 2) // 中心y座標
-		fr      = float64(r - 25)
-		titleFr = float64(r)
-		radian  = math.Pi / 180
-	)
-	for i := 0; i < len(c.Params); i++ {
-		var (
-			n      = float64(360 / len(c.Params) * i)
-			theta  = n * radian
-			x      = fr*math.Cos(theta) + cx
-			y      = fr*math.Sin(theta) + cy
-			titleX = math.Cos(theta)
-			titleY = math.Sin(theta)
-		)
-		// 90度半時計回りに回転させる
-		// See. https://mathwords.net/heimenkaiten
-		rad := 270 * radian
-		ntx := titleFr*(titleX*math.Cos(rad)-titleY*math.Sin(rad)) + cx
-		nty := titleFr*(titleX*math.Sin(rad)+titleY*math.Cos(rad)) + cy
-
-		titlePos.X = append(titlePos.X, int(ntx))
-		titlePos.Y = append(titlePos.Y, int(nty))
-
-		max := 255
-		switch i {
-		case 0: // MHP
-			max = 9999
-		case 1: // MMP
-			max = 2000
-		case 6, 7: // AGI, LUK
-			max = 500
-		}
-		p := c.Params[i]
-		last := p[len(p)-1]
-		x = x * float64(last) / float64(max)
-		y = y * float64(last) / float64(max)
-
-		paramPos.X = append(paramPos.X, int(x))
-		paramPos.Y = append(paramPos.Y, int(y))
-	}
-	return
-}
-
-// RegularPolygon は正多角形のポリゴンの座標を返す
-func RegularPolygon(r, w, h float64, polygonCount int) (paramPos PolygonPosition) {
-	var (
-		cx     = w / 2
-		cy     = h / 2
-		radian = math.Pi / 180
-	)
-	for i := 0; i < polygonCount; i++ {
-		var (
-			n     = float64(360 / polygonCount * i)
-			theta = n * radian
-			x     = r*math.Cos(theta) + cx
-			y     = r*math.Sin(theta) + cy
-		)
-		paramPos.X = append(paramPos.X, int(x))
-		paramPos.Y = append(paramPos.Y, int(y))
-	}
-	return
 }
 
 // PolygonPoint はdataから座標を返す
@@ -143,6 +75,26 @@ func PolygonPoint(data [][]float64, r float64, cp point.Point) (pp point.Polygon
 			y     = nr*math.Sin(theta) + cp.Y
 		)
 		pp.Points = append(pp.Points, point.Point{X: x, Y: y})
+	}
+	return
+}
+
+// RegularPolygon は正多角形のポリゴンの座標を返す
+func RegularPolygon(r, w, h float64, polygonCount int) (paramPos PolygonPosition) {
+	var (
+		cx     = w / 2
+		cy     = h / 2
+		radian = math.Pi / 180
+	)
+	for i := 0; i < polygonCount; i++ {
+		var (
+			n     = float64(360 / polygonCount * i)
+			theta = n * radian
+			x     = r*math.Cos(theta) + cx
+			y     = r*math.Sin(theta) + cy
+		)
+		paramPos.X = append(paramPos.X, int(x))
+		paramPos.Y = append(paramPos.Y, int(y))
 	}
 	return
 }
