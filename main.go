@@ -43,7 +43,6 @@ func main() {
 		titlePP := point.RegularPolygonPoint(pr, w, h, 8)
 		textPP := point.RegularPolygonPoint(r, w, h, 8)
 		WriteSVG(os.Stdout, w, h, paramPP, titlePP, textPP)
-		//WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames, titlePP)
 		break
 	}
 }
@@ -102,8 +101,10 @@ func RegularPolygon(r, w, h float64, polygonCount int) (paramPos PolygonPosition
 
 func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.PolygonPoint) {
 	var (
-		wi = int(w)
-		hi = int(h)
+		wi    = int(w)
+		hi    = int(h)
+		angle = 270 * math.Pi / 180
+		cp    = point.Point{X: w / 2, Y: h / 2}
 	)
 	canvas := svg.New(wr)
 	canvas.Start(wi, hi)
@@ -111,7 +112,7 @@ func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.Polygon
 	// 外枠の描画
 	canvas.Polygon(titlePP.Xs().Int(), titlePP.Ys().Int(), "fill:#FAFAFA; stroke:#BDBDBD; ")
 	// パラメータ線の描画
-	canvas.Polygon(paramPP.Xs().Int(), paramPP.Ys().Int(), "fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;")
+	canvas.Polygon(paramPP.Rotate(angle, cp).Xs().Int(), paramPP.Rotate(angle, cp).Ys().Int(), "fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;")
 	// 中央線の描画
 	for _, p := range titlePP.Points {
 		var (
@@ -127,7 +128,7 @@ func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.Polygon
 		canvas.Polygon(p.Xs().Int(), p.Ys().Int(), "fill:none; stroke:#BDBDBD;")
 	}
 	// テキストの描画
-	for i, v := range textPP.Points {
+	for i, v := range textPP.Rotate(angle, cp).Points {
 		var (
 			x, y = int(v.X), int(v.Y)
 			n    = paramNames[i]
