@@ -9,7 +9,6 @@ XBUILD_TARGETS := \
 DIST_DIR := dist/$(VERSION)
 README := README.md
 EXTERNAL_TOOLS := \
-	github.com/golang/dep/cmd/dep \
 	github.com/mitchellh/gox \
 	github.com/tcnksm/ghr \
 	github.com/motemen/gobump/cmd/gobump \
@@ -53,9 +52,6 @@ clean: ## バイナリ、配布物ディレクトリを削除する
 	-rm -rf bin
 	-rm -rf $(DIST_DIR)
 
-deps: bootstrap ## 依存ライブラリを更新する
-	dep ensure
-
 bootstrap: ## 外部ツールをインストールする
 	for t in $(EXTERNAL_TOOLS); do \
 		echo "Installing $$t ..." ; \
@@ -63,4 +59,4 @@ bootstrap: ## 外部ツールをインストールする
 	done
 	gometalinter --install --update
 
-.PHONY: help build install xbuild archive release lint test clean deps bootstrap
+.PHONY: help build install xbuild archive release lint test clean bootstrap
