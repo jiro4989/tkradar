@@ -40,8 +40,6 @@ func main() {
 		w, h := r*2, r*2
 		paramPos, titlePos := PolygonXYs(c, r, w, h)
 		paramPos = PolygonXYs3(c, float64(r), float64(w), float64(h))
-		//paramPos.Rotate(90)
-		//titlePos.Rotate(90)
 		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames)
 		break
 	}
@@ -94,8 +92,8 @@ func PolygonXYs(c Class, r, w, h int) (paramPos PolygonPosition, titlePos Polygo
 	return
 }
 
-// PolygonXYs2 はClassのパラメータからX,Y座標のスライスを返す
-func PolygonXYs2(r, w, h float64, polygonCount int) (paramPos PolygonPosition) {
+// RegularPolygon は正多角形のポリゴンの座標を返す
+func RegularPolygon(r, w, h float64, polygonCount int) (paramPos PolygonPosition) {
 	var (
 		cx     = w / 2
 		cy     = h / 2
@@ -172,7 +170,7 @@ func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPo
 	// 等間隔基準線の描画
 	for i := 0; i < 5; i++ {
 		r := w / 2 * i / 5
-		p := PolygonXYs2(float64(r), float64(w), float64(h), len(paramNames))
+		p := RegularPolygon(float64(r), float64(w), float64(h), len(paramNames))
 		canvas.Polygon(p.X, p.Y, "fill:none; stroke:#BDBDBD;")
 	}
 	// canvas.Text(w/2, h/2, title, "text-anchor:middle; font-size:30px; fill:white;")
