@@ -15,10 +15,10 @@
 <line x1="250" y1="250" x2="249" y2="25" style="fill:#FAFAFA; stroke:#BDBDBD; " />
 <line x1="250" y1="250" x2="409" y2="90" style="fill:#FAFAFA; stroke:#BDBDBD; " />
 <polygon points="250,250 250,250 250,250 250,250 250,250 250,250 250,250 250,250" style="fill:none; stroke:#BDBDBD;" />
-<polygon points="300,250 285,285 250,300 214,285 200,250 214,214 250,200 285,214" style="fill:none; stroke:#BDBDBD;" />
-<polygon points="350,250 320,320 250,350 179,320 150,250 179,179 249,150 320,179" style="fill:none; stroke:#BDBDBD;" />
-<polygon points="400,250 356,356 250,400 143,356 100,250 143,143 249,100 356,143" style="fill:none; stroke:#BDBDBD;" />
-<polygon points="450,250 391,391 250,450 108,391 50,250 108,108 249,50 391,108" style="fill:none; stroke:#BDBDBD;" />
+<polygon points="295,250 281,281 250,295 218,281 205,250 218,218 250,205 281,218" style="fill:none; stroke:#BDBDBD;" />
+<polygon points="340,250 313,313 250,340 186,313 160,250 186,186 249,160 313,186" style="fill:none; stroke:#BDBDBD;" />
+<polygon points="385,250 345,345 250,385 154,345 115,250 154,154 249,115 345,154" style="fill:none; stroke:#BDBDBD;" />
+<polygon points="430,250 377,377 250,430 122,377 70,250 122,122 249,70 377,122" style="fill:none; stroke:#BDBDBD;" />
 <text x="500" y="250" style="text-anchor:middle; font-size:30px; fill:black;" >MHP</text>
 <text x="426" y="426" style="text-anchor:middle; font-size:30px; fill:black;" >MMP</text>
 <text x="250" y="500" style="text-anchor:middle; font-size:30px; fill:black;" >ATK</text>

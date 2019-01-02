@@ -122,10 +122,11 @@ func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.Polygon
 	}
 	// 等間隔基準線の描画
 	for i := 0; i < 5; i++ {
-		r := w / 2 * float64(i) / 5
+		r := (w/2 - 25) * float64(i) / 5
 		p := point.RegularPolygonPoint(r, w, h, len(paramNames))
 		canvas.Polygon(p.Xs().Int(), p.Ys().Int(), "fill:none; stroke:#BDBDBD;")
 	}
+	// テキストの描画
 	for i, v := range textPP.Points {
 		var (
 			x, y = int(v.X), int(v.Y)
