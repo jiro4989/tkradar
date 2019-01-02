@@ -13,7 +13,7 @@
 <line x1="250" y1="250" x2="73" y2="73" style="stroke:black;" />
 <line x1="250" y1="250" x2="249" y2="0" style="stroke:black;" />
 <line x1="250" y1="250" x2="426" y2="73" style="stroke:black;" />
-<polygon points="455,250 344,344 250,450 113,386 144,250 173,173 249,109 407,92" style="fill:none; stroke:red; " />
+<polygon points="249,44 344,155 450,249 386,386 250,355 173,326 109,250 92,92" style="fill:none; stroke:red; " />
 <polygon points="250,250 250,250 250,250 250,250 250,250 250,250 250,250 250,250" style="fill:none; stroke:black;" />
 <polygon points="300,250 285,285 250,300 214,285 200,250 214,214 250,200 285,214" style="fill:none; stroke:black;" />
 <polygon points="350,250 320,320 250,350 179,320 150,250 179,179 249,150 320,179" style="fill:none; stroke:black;" />

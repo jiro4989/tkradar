@@ -152,11 +152,17 @@ func PolygonXYs3(c Class, r, w, h float64) (paramPos PolygonPosition) {
 		var (
 			n     = float64(360 / polygonCount * i)
 			theta = n * radian
-			x     = nr*math.Cos(theta) + cx
-			y     = nr*math.Sin(theta) + cy
+			x     = math.Cos(theta)
+			y     = math.Sin(theta)
 		)
-		paramPos.X = append(paramPos.X, int(x))
-		paramPos.Y = append(paramPos.Y, int(y))
+		// 90度半時計回りに回転させる
+		// See. https://mathwords.net/heimenkaiten
+		rad := 270 * radian
+		nx := nr*(x*math.Cos(rad)-y*math.Sin(rad)) + cx
+		ny := nr*(x*math.Sin(rad)+y*math.Cos(rad)) + cy
+
+		paramPos.X = append(paramPos.X, int(nx))
+		paramPos.Y = append(paramPos.Y, int(ny))
 	}
 	return
 }
