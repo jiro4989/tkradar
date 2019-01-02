@@ -106,13 +106,13 @@ func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos Position,
 	canvas := svg.New(wr)
 	canvas.Start(w, h)
 	canvas.Circle(w/2, h/2, 100)
-	canvas.Polygon(titlePos.X, titlePos.Y, "fill:white;")
-	canvas.Text(w/2, h/2, title, "text-anchor:middle;font-size:30px;fill:white")
+	canvas.Polygon(titlePos.X, titlePos.Y, "fill:white; stroke:black; ")
+	canvas.Text(w/2, h/2, title, "text-anchor:middle; font-size:30px; fill:white;")
 	for i := 0; i < len(titlePos.X); i++ {
 		x := titlePos.X[i]
 		y := titlePos.Y[i]
 		t := paramNames[i]
-		canvas.Text(x, y, t, "text-anchor:middle;font-size:30px;fill:black")
+		canvas.Text(x, y, t, "text-anchor:middle; font-size:30px; fill:black;")
 	}
 	canvas.End()
 }
