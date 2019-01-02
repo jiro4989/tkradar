@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
+	"os"
 
 	svg "github.com/ajstarks/svgo"
 	"github.com/jiro4989/tkradar/point"
@@ -38,10 +38,9 @@ func main() {
 			w, h = r * 2, r * 2
 			cp   = point.Point{X: w / 2, Y: h / 2}
 		)
+		paramPP := PolygonPoint(c.Params, r, cp)
 		titlePP := point.RegularPolygonPoint(r, w, h, 8)
-		paramPos := PolygonPoint(c.Params, r, cp)
-		fmt.Println(titlePP)
-		fmt.Println(paramPos)
+		WriteSVG2(os.Stdout, w, h, paramPP, titlePP)
 		//WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames, titlePP)
 		break
 	}
@@ -99,6 +98,20 @@ func RegularPolygon(r, w, h float64, polygonCount int) (paramPos PolygonPosition
 	return
 }
 
+func WriteSVG2(wr io.Writer, w, h float64, paramPP, titlePP point.PolygonPoint) {
+	var (
+		wi = int(w)
+		hi = int(h)
+	)
+	canvas := svg.New(wr)
+	canvas.Start(wi, hi)
+	canvas.Circle(wi/2, hi/2, 100)
+	// 外枠の描画
+	canvas.Polygon(titlePP.Xs().Int(), titlePP.Ys().Int(), "fill:#FAFAFA; stroke:#BDBDBD; ")
+	// パラメータ線の描画
+	canvas.Polygon(paramPP.Xs().Int(), paramPP.Ys().Int(), "fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;")
+	canvas.End()
+}
 func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPosition, paramNames []string, titlePP point.PolygonPoint) {
 	canvas := svg.New(wr)
 	canvas.Start(w, h)
