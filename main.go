@@ -53,8 +53,8 @@ func main() {
 		r := 250
 		w, h := r*2, r*2
 		paramPos, titlePos := PolygonXYs(c, r, w, h)
-		paramPos.Rotate(90)
-		titlePos.Rotate(90)
+		//paramPos.Rotate(90)
+		//titlePos.Rotate(90)
 		WriteSVG(os.Stdout, "test", w, h, paramPos, titlePos, paramNames)
 		break
 	}
