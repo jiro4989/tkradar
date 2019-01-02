@@ -118,6 +118,12 @@ func WriteSVG2(wr io.Writer, w, h float64, paramPP, titlePP point.PolygonPoint) 
 		)
 		canvas.Line(cx, cy, x, y, "fill:#FAFAFA; stroke:#BDBDBD; ")
 	}
+	// 等間隔基準線の描画
+	for i := 0; i < 5; i++ {
+		r := w / 2 * float64(i) / 5
+		p := point.RegularPolygonPoint(r, w, h, len(paramNames))
+		canvas.Polygon(p.Xs().Int(), p.Ys().Int(), "fill:none; stroke:#BDBDBD;")
+	}
 	canvas.End()
 }
 func WriteSVG(wr io.Writer, title string, w, h int, paramPos, titlePos PolygonPosition, paramNames []string, titlePP point.PolygonPoint) {
