@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	svg "github.com/ajstarks/svgo"
 	"github.com/jiro4989/tkradar/point"
@@ -13,7 +14,9 @@ import (
 )
 
 var (
-	paramNames = []string{"MHP", "MMP", "ATK", "DEF", "MAT", "MDF", "AGI", "LUK"}
+	paramNamesEN = []string{"MHP", "MMP", "ATK", "DEF", "MAT", "MDF", "AGI", "LUK"}
+	paramNamesJA = []string{"最大HP", "最大MP", "攻撃力", "防御力", "魔法攻撃", "魔法防御", "敏捷性", "運"}
+	paramNames   = paramNamesEN
 )
 
 type PolygonPosition struct {
@@ -24,7 +27,8 @@ func init() {
 	cobra.OnInitialize()
 	RootCommand.Flags().Float64P("width", "w", 500.0, "SVG width")
 	RootCommand.Flags().Float64P("text-interval", "t", 50, "Interval")
-	RootCommand.Flags().Float64P("frame-interval", "f", 70, "Interval")
+	RootCommand.Flags().Float64P("frame-interval", "f", 90, "Interval")
+	RootCommand.Flags().StringP("language", "l", "en", "Parameters language [en|ja]")
 }
 
 var RootCommand = &cobra.Command{
@@ -52,6 +56,13 @@ var RootCommand = &cobra.Command{
 
 		fi, err := flags.GetFloat64("frame-interval")
 		checkErr(err)
+
+		lang, err := flags.GetString("language")
+		checkErr(err)
+
+		if strings.ToLower(lang) == "ja" {
+			paramNames = paramNamesJA
+		}
 
 		var (
 			r      = w / 2
