@@ -39,7 +39,7 @@ func main() {
 			w, h = r * 2, r * 2
 			cp   = point.Point{X: w / 2, Y: h / 2}
 		)
-		paramPP := PolygonPoint(c.Params, pr, cp)
+		paramPP := PolygonPoint(c.FetchLastParams(), ParamMaxes, pr, cp)
 		titlePP := point.RegularPolygonPoint(pr, w, h, 8)
 		textPP := point.RegularPolygonPoint(r, w, h, 8)
 		WriteSVG(os.Stdout, w, h, paramPP, titlePP, textPP)
@@ -48,29 +48,17 @@ func main() {
 }
 
 // PolygonPoint はdataから座標を返す
-func PolygonPoint(data [][]float64, r float64, cp point.Point) (pp point.PolygonPoint) {
+func PolygonPoint(data, maxes []float64, r float64, cp point.Point) (pp point.PolygonPoint) {
 	var (
 		radian       = math.Pi / 180
 		polygonCount = len(data)
 	)
 	for i := 0; i < polygonCount; i++ {
 		// 座標計算に必要な半径はパラメータの値で都度異なるため、rを都度更新
-		max := 255.0
-		switch i {
-		case 0: // MHP
-			max = 9999.0
-		case 1: // MMP
-			max = 2000.0
-		case 6, 7: // AGI, LUK
-			max = 500.0
-		}
-		p := data[i]
-		last := p[len(p)-1]
-		nr := r * last / max
-
 		var (
 			n     = float64(360 / polygonCount * i)
 			theta = n * radian
+			nr    = r * data[i] / maxes[i]
 			x     = nr*math.Cos(theta) + cp.X
 			y     = nr*math.Sin(theta) + cp.Y
 		)
