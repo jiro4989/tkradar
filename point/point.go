@@ -28,12 +28,13 @@ type PolygonPoint struct {
 	Points
 }
 
-func (p PolygonPoint) Rotate(angle float64, cp Point) PolygonPoint {
+func (p PolygonPoint) Rotate(angle float64, cp Point) (np PolygonPoint) {
 	l := len(p.Points)
+	np.Points = make(Points, len(p.Points))
 	for i := 0; i < l; i++ {
-		p.Points[i] = p.Points[i].Rotate(angle, cp)
+		np.Points[i] = p.Points[i].Rotate(angle, cp)
 	}
-	return p
+	return
 }
 
 func (p PolygonPoint) Xs() (x float64slice) {
