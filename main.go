@@ -20,7 +20,7 @@ type PolygonPosition struct {
 }
 
 func main() {
-	b, err := ioutil.ReadFile("testdata/Classes2.json")
+	b, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
@@ -103,7 +103,7 @@ func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.Polygon
 	var (
 		wi    = int(w)
 		hi    = int(h)
-		angle = 270 * math.Pi / 180
+		angle = -90.0
 		cp    = point.Point{X: w / 2, Y: h / 2}
 	)
 	canvas := svg.New(wr)
