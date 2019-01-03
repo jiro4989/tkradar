@@ -5,7 +5,7 @@
      xmlns:xlink="http://www.w3.org/1999/xlink">
 <circle cx="250" cy="250" r="100" />
 <polygon points="475,250 409,409 250,475 90,409 25,250 90,90 249,25 409,90" style="fill:#FAFAFA; stroke:#BDBDBD; " />
-<polygon points="249,250 335,164 430,70 372,127 250,249 181,318 123,376 108,391" style="fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;" />
+<polygon points="250,65 335,164 430,250 372,372 250,345 181,318 123,250 108,108" style="fill:#BBD9E7; stroke:#91C0DA; stroke-width: 3px;" />
 <line x1="250" y1="250" x2="475" y2="250" style="fill:#FAFAFA; stroke:#BDBDBD; " />
 <line x1="250" y1="250" x2="409" y2="409" style="fill:#FAFAFA; stroke:#BDBDBD; " />
 <line x1="250" y1="250" x2="250" y2="475" style="fill:#FAFAFA; stroke:#BDBDBD; " />
@@ -19,9 +19,9 @@
 <polygon points="340,250 313,313 250,340 186,313 160,250 186,186 249,160 313,186" style="fill:none; stroke:#BDBDBD;" />
 <polygon points="385,250 345,345 250,385 154,345 115,250 154,154 249,115 345,154" style="fill:none; stroke:#BDBDBD;" />
 <polygon points="430,250 377,377 250,430 122,377 70,250 122,122 249,70 377,122" style="fill:none; stroke:#BDBDBD;" />
-<text x="249" y="0" style="text-anchor:middle; font-size:30px; fill:black;" >MHP</text>
+<text x="250" y="0" style="text-anchor:middle; font-size:30px; fill:black;" >MHP</text>
 <text x="426" y="73" style="text-anchor:middle; font-size:30px; fill:black;" >MMP</text>
-<text x="500" y="249" style="text-anchor:middle; font-size:30px; fill:black;" >ATK</text>
+<text x="500" y="250" style="text-anchor:middle; font-size:30px; fill:black;" >ATK</text>
 <text x="426" y="426" style="text-anchor:middle; font-size:30px; fill:black;" >DEF</text>
 <text x="250" y="500" style="text-anchor:middle; font-size:30px; fill:black;" >MAT</text>
 <text x="73" y="426" style="text-anchor:middle; font-size:30px; fill:black;" >MDF</text>
