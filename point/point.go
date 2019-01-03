@@ -88,10 +88,10 @@ func FetchPolygonPoint(data, maxes []float64, r float64, cp Point) (pp PolygonPo
 }
 
 // RegularPolygonPoint は正多角形のポリゴンの座標を返す
-func RegularPolygonPoint(r, w, h float64, polygonCount int) (pp PolygonPoint) {
+func RegularPolygonPoint(r, w, h float64, polygonCount int, cp Point) (pp PolygonPoint) {
 	var (
-		cx     = w / 2
-		cy     = h / 2
+		cx     = cp.X
+		cy     = cp.Y
 		radian = math.Pi / 180
 	)
 	for i := 0; i < polygonCount; i++ {

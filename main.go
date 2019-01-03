@@ -34,24 +34,23 @@ func main() {
 		}
 		var (
 			r    = 250.0
-			pr   = r - 25.0
+			pr   = r - 50.0
 			w, h = r * 2, r * 2
 			cp   = point.Point{X: w / 2, Y: h / 2}
 		)
 		paramPP := point.FetchPolygonPoint(c.FetchLastParams(), ParamMaxes, pr, cp)
-		titlePP := point.RegularPolygonPoint(pr, w, h, 8)
-		textPP := point.RegularPolygonPoint(r, w, h, 8)
-		WriteSVG(os.Stdout, w, h, paramPP, titlePP, textPP)
+		titlePP := point.RegularPolygonPoint(pr, w, h, 8, cp)
+		textPP := point.RegularPolygonPoint(r-50, w, h, 8, cp)
+		WriteSVG(os.Stdout, r*2, r*2, cp, paramPP, titlePP, textPP)
 		break
 	}
 }
 
-func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.PolygonPoint) {
+func WriteSVG(wr io.Writer, w, h float64, cp point.Point, paramPP, titlePP, textPP point.PolygonPoint) {
 	var (
 		wi    = int(w)
 		hi    = int(h)
 		angle = -90.0
-		cp    = point.Point{X: w / 2, Y: h / 2}
 	)
 	canvas := svg.New(wr)
 	canvas.Start(wi, hi)
@@ -71,7 +70,7 @@ func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.Polygon
 	// 等間隔基準線の描画
 	for i := 0; i < 5; i++ {
 		r := (w/2 - 25) * float64(i) / 5
-		p := point.RegularPolygonPoint(r, w, h, len(paramNames))
+		p := point.RegularPolygonPoint(r, w, h, len(paramNames), cp)
 		canvas.Polygon(p.Xs().Int(), p.Ys().Int(), "fill:none; stroke:#BDBDBD;")
 	}
 	// テキストの描画
