@@ -1,8 +1,5 @@
 language: go
 
-before_install:
-  - go get github.com/golang/dep/...
-install:
-  - $GOPATH/bin/dep ensure
 script:
-  - go test ./...
+  - env GO111MODULE=on go build
+  - env GO111MODULE=on go test
