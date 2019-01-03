@@ -9,20 +9,14 @@ type Points []Point
 
 // Rotate は任意の角度回転した座標を返す。
 // cpは原点座標
-// angle は以下の式で求める
-// 90度回転の例:
-//
-//   n := 90
-//   n * math.Pi / 180
 func (p Point) Rotate(angle float64, cp Point) Point {
 	p.X -= cp.X
 	p.Y -= cp.Y
 
 	var (
-		sin = math.Sin(angle)
-		cos = math.Cos(angle)
-		nx  = cos*p.X - sin*p.Y
-		ny  = sin*p.X + cos*p.Y
+		sin, cos = math.Sincos(angle * math.Pi / 180)
+		nx       = cos*p.X - sin*p.Y
+		ny       = sin*p.X + cos*p.Y
 	)
 
 	p.X = nx + cp.X
