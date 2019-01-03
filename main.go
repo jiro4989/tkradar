@@ -79,26 +79,6 @@ func PolygonPoint(data [][]float64, r float64, cp point.Point) (pp point.Polygon
 	return
 }
 
-// RegularPolygon は正多角形のポリゴンの座標を返す
-func RegularPolygon(r, w, h float64, polygonCount int) (paramPos PolygonPosition) {
-	var (
-		cx     = w / 2
-		cy     = h / 2
-		radian = math.Pi / 180
-	)
-	for i := 0; i < polygonCount; i++ {
-		var (
-			n     = float64(360 / polygonCount * i)
-			theta = n * radian
-			x     = r*math.Cos(theta) + cx
-			y     = r*math.Sin(theta) + cy
-		)
-		paramPos.X = append(paramPos.X, int(x))
-		paramPos.Y = append(paramPos.Y, int(y))
-	}
-	return
-}
-
 func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.PolygonPoint) {
 	var (
 		wi    = int(w)
