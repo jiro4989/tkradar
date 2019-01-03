@@ -1,9 +1,8 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 
 	svg "github.com/ajstarks/svgo"
@@ -19,30 +18,9 @@ type PolygonPosition struct {
 }
 
 func main() {
-	b, err := ioutil.ReadFile(os.Args[1])
-	if err != nil {
-		panic(err)
-	}
-	var classes Classes
-	if err := json.Unmarshal(b, &classes); err != nil {
-		panic(err)
-	}
-	for i, c := range classes {
-		if i == 0 {
-			// Classes.jsonの最初のデータは絶対にnullのためスキップ
-			continue
-		}
-		var (
-			r    = 250.0
-			pr   = r - 50.0
-			w, h = r * 2, r * 2
-			cp   = point.Point{X: w / 2, Y: h / 2}
-		)
-		paramPP := point.FetchPolygonPoint(c.FetchLastParams(), ParamMaxes, pr, cp)
-		titlePP := point.RegularPolygonPoint(pr, w, h, 8, cp)
-		textPP := point.RegularPolygonPoint(r-50, w, h, 8, cp)
-		WriteSVG(os.Stdout, r*2, r*2, cp, paramPP, titlePP, textPP)
-		break
+	if err := RootCommand.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(-1)
 	}
 }
 
