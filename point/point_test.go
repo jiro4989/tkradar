@@ -31,6 +31,13 @@ func TestRotate(t *testing.T) {
 			desc:   "P(10, 10), rotate 90",
 		},
 		TD{
+			self:   Point{X: 20, Y: 20},
+			angle:  90,
+			cp:     Point{X: 10, Y: 10},
+			expect: Point{X: 0, Y: 20},
+			desc:   "P(20, 20), cp(10, 10), rotate 90",
+		},
+		TD{
 			self:   Point{X: 10, Y: 10},
 			angle:  180,
 			cp:     Point{X: 0, Y: 0},
