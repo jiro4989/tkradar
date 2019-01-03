@@ -1,6 +1,7 @@
 package point
 
 import (
+	"fmt"
 	"math"
 	"testing"
 
@@ -71,5 +72,37 @@ func TestRotate(t *testing.T) {
 		got1 := v.self.Rotate(angle, cp)
 		assert.Equal(t, expect.X, math.Round(got1.X), v.desc)
 		assert.Equal(t, expect.Y, math.Round(got1.Y), v.desc)
+	}
+}
+
+func TestFetchPolygonPoint(t *testing.T) {
+	type TD struct {
+		data  []float64
+		maxes []float64
+		r     float64
+		cp    Point
+		pp    PolygonPoint
+	}
+	tds := []TD{
+		TD{
+			data:  []float64{10.0, 5.0, 0.0, 10.0},
+			maxes: []float64{10.0, 10.0, 10.0, 10.0},
+			r:     10.0,
+			cp:    Point{X: 0.0, Y: 0.0},
+			pp: PolygonPoint{
+				Points: Points{
+					Point{X: 10.0, Y: 0.0},
+					Point{X: 0.0, Y: -5.0},
+					Point{X: 0.0, Y: 0.0},
+					Point{X: 0.0, Y: 10.0},
+				},
+			},
+		},
+	}
+	for _, v := range tds {
+		data, maxes, r, cp, pp := v.data, v.maxes, v.r, v.cp, v.pp
+		got1 := FetchPolygonPoint(data, maxes, r, cp)
+		// assert.Equal(t, pp, got1)
+		fmt.Println(pp, got1)
 	}
 }
