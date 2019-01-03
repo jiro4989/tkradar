@@ -29,6 +29,7 @@ func init() {
 	RootCommand.Flags().Float64P("text-interval", "t", 50, "Interval")
 	RootCommand.Flags().Float64P("frame-interval", "f", 90, "Interval")
 	RootCommand.Flags().StringP("language", "l", "en", "Parameters language [en|ja]")
+	RootCommand.Flags().StringP("out-filename-format", "o", "class%03d.svg", "Out filename format")
 }
 
 var RootCommand = &cobra.Command{
@@ -60,6 +61,9 @@ var RootCommand = &cobra.Command{
 		lang, err := flags.GetString("language")
 		checkErr(err)
 
+		outfmt, err := flags.GetString("out-filename-format")
+		checkErr(err)
+
 		if strings.ToLower(lang) == "ja" {
 			paramNames = paramNamesJA
 		}
@@ -89,8 +93,14 @@ var RootCommand = &cobra.Command{
 				paramPP := point.FetchPolygonPoint(c.FetchLastParams(), ParamMaxes, paramR, cp)
 				framePP := point.RegularPolygonPoint(paramR, w, h, 8, cp)
 				textPP := point.RegularPolygonPoint(textR, w, h, 8, cp)
-				WriteSVG(os.Stdout, w, h, cp, paramPP, framePP, textPP)
-				break
+
+				func() {
+					fn := fmt.Sprintf(outfmt, i)
+					wr, err := os.OpenFile(fn, os.O_CREATE|os.O_WRONLY, 0644)
+					checkErr(err)
+					defer wr.Close()
+					WriteSVG(wr, w, h, cp, paramPP, framePP, textPP)
+				}()
 			}
 		}
 	},
