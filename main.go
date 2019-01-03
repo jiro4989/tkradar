@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
-	"math"
 	"os"
 
 	svg "github.com/ajstarks/svgo"
@@ -39,32 +38,12 @@ func main() {
 			w, h = r * 2, r * 2
 			cp   = point.Point{X: w / 2, Y: h / 2}
 		)
-		paramPP := PolygonPoint(c.FetchLastParams(), ParamMaxes, pr, cp)
+		paramPP := point.FetchPolygonPoint(c.FetchLastParams(), ParamMaxes, pr, cp)
 		titlePP := point.RegularPolygonPoint(pr, w, h, 8)
 		textPP := point.RegularPolygonPoint(r, w, h, 8)
 		WriteSVG(os.Stdout, w, h, paramPP, titlePP, textPP)
 		break
 	}
-}
-
-// PolygonPoint はdataから座標を返す
-func PolygonPoint(data, maxes []float64, r float64, cp point.Point) (pp point.PolygonPoint) {
-	var (
-		radian       = math.Pi / 180
-		polygonCount = len(data)
-	)
-	for i := 0; i < polygonCount; i++ {
-		// 座標計算に必要な半径はパラメータの値で都度異なるため、rを都度更新
-		var (
-			n     = float64(360 / polygonCount * i)
-			theta = n * radian
-			nr    = r * data[i] / maxes[i]
-			x     = nr*math.Cos(theta) + cp.X
-			y     = nr*math.Sin(theta) + cp.Y
-		)
-		pp.Points = append(pp.Points, point.Point{X: x, Y: y})
-	}
-	return
 }
 
 func WriteSVG(wr io.Writer, w, h float64, paramPP, titlePP, textPP point.PolygonPoint) {

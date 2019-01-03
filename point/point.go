@@ -1,6 +1,8 @@
 package point
 
-import "math"
+import (
+	"math"
+)
 
 type Point struct {
 	X, Y float64
@@ -61,6 +63,26 @@ func (f float64slice) Int() (i []int) {
 	i = make([]int, len(f))
 	for n, v := range f {
 		i[n] = int(v)
+	}
+	return
+}
+
+// PolygonPoint は描画用のパラメタの座標を返す。
+func FetchPolygonPoint(data, maxes []float64, r float64, cp Point) (pp PolygonPoint) {
+	var (
+		radian       = math.Pi / 180
+		polygonCount = len(data)
+	)
+	for i := 0; i < polygonCount; i++ {
+		// 座標計算に必要な半径はパラメータの値で都度異なるため、rを都度更新
+		var (
+			n     = float64(360 / polygonCount * i)
+			theta = n * radian
+			nr    = r * data[i] / maxes[i]
+			x     = nr*math.Cos(theta) + cp.X
+			y     = nr*math.Sin(theta) + cp.Y
+		)
+		pp.Points = append(pp.Points, Point{X: x, Y: y})
 	}
 	return
 }
