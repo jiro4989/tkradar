@@ -114,7 +114,6 @@ func WriteSVG(wr io.Writer, w, h float64, cp point.Point, paramPP, framePP, text
 	)
 	canvas := svg.New(wr)
 	canvas.Start(wi, hi)
-	canvas.Circle(wi/2, hi/2, 100)
 
 	// 外枠の描画
 	canvas.Polygon(framePP.Xs().Int(), framePP.Ys().Int(), "fill:#FAFAFA; stroke:#BDBDBD; ")
