@@ -99,14 +99,14 @@ var RootCommand = &cobra.Command{
 					wr, err := os.OpenFile(fn, os.O_CREATE|os.O_WRONLY, 0644)
 					checkErr(err)
 					defer wr.Close()
-					WriteSVG(wr, w, h, cp, paramPP, framePP, textPP)
+					WriteSVG(wr, w, h, cp, paramR, paramPP, framePP, textPP)
 				}()
 			}
 		}
 	},
 }
 
-func WriteSVG(wr io.Writer, w, h float64, cp point.Point, paramPP, framePP, textPP point.PolygonPoint) {
+func WriteSVG(wr io.Writer, w, h float64, cp point.Point, paramR float64, paramPP, framePP, textPP point.PolygonPoint) {
 	var (
 		wi    = int(w)
 		hi    = int(h)
@@ -114,7 +114,6 @@ func WriteSVG(wr io.Writer, w, h float64, cp point.Point, paramPP, framePP, text
 	)
 	canvas := svg.New(wr)
 	canvas.Start(wi, hi)
-	canvas.Circle(wi/2, hi/2, 100)
 
 	// 外枠の描画
 	canvas.Polygon(framePP.Xs().Int(), framePP.Ys().Int(), "fill:#FAFAFA; stroke:#BDBDBD; ")
@@ -133,7 +132,7 @@ func WriteSVG(wr io.Writer, w, h float64, cp point.Point, paramPP, framePP, text
 
 	// 等間隔基準線の描画
 	for i := 0; i < 5; i++ {
-		r := (w/2 - 25) * float64(i) / 5
+		r := paramR * float64(i) / 5
 		p := point.RegularPolygonPoint(r, w, h, len(paramNames), cp)
 		canvas.Polygon(p.Xs().Int(), p.Ys().Int(), "fill:none; stroke:#BDBDBD;")
 	}
