@@ -21,6 +21,7 @@ require (
 	github.com/hashicorp/go-version v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jgautheron/goconst v0.0.0-20170703170152-9740945f5dcb // indirect
+	github.com/jiro4989/goosutil v1.0.0
 	github.com/kisielk/errcheck v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect

@@ -4,6 +4,8 @@ github.com/ajstarks/svgo
 github.com/davecgh/go-spew/spew
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
+# github.com/jiro4989/goosutil v1.0.0
+github.com/jiro4989/goosutil
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
 # github.com/spf13/cobra v0.0.3
