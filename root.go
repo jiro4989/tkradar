@@ -9,8 +9,13 @@ import (
 	"strings"
 
 	svg "github.com/ajstarks/svgo"
+	"github.com/jiro4989/goosutil"
 	"github.com/jiro4989/tkradar/point"
 	"github.com/spf13/cobra"
+)
+
+const (
+	targetFileName = "Classes.json"
 )
 
 var (
@@ -38,8 +43,7 @@ var RootCommand = &cobra.Command{
 	Long:  "tkradar",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			fmt.Fprintln(os.Stderr, "Need Classes.json.\nSee 'tkradar -h'.")
-			os.Exit(1)
+			args = append(args, targetFileName)
 		}
 
 		checkErr := func(err error) {
@@ -77,6 +81,10 @@ var RootCommand = &cobra.Command{
 		)
 
 		for _, f := range args {
+			if !goosutil.Exists(f) {
+				fmt.Fprintln(os.Stderr, "[WARN]"+targetFileName+" is not found.")
+				continue
+			}
 			b, err := ioutil.ReadFile(f)
 			if err != nil {
 				panic(err)
